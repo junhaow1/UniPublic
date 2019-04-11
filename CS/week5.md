@@ -80,6 +80,7 @@
   - Transmission Round
     - All the segments in the congestion window are sent out to the receiver and their ACK's are sent back to the sender.
       - In pipeline transmission, we can assume RTT = Transmission Round
+  - ssthread = slow-start threshold
 - Questions
   - How does the sender control its traffic send rate?
     - Maintance a congestion window cwnd
@@ -101,9 +102,9 @@
           - ssthresh = cwnd / 2
           - cwnd = 1MSS
           - Re-run the slow start
-        - If a **fast transmission** event occurs
+        - If **fast retransmission**
           - ssthresh = cwnd / 2
-          - Cwnd = ssthresh +3 MSS (since at least 3 segments will be successfully sent)
+          - cwnd = ssthresh +3 MSS (since at least 3 segments will be successfully sent)
           - Run fast recovery
     - Congestion avoidance
       - For each transmission round
@@ -111,20 +112,15 @@
           - cwnd = cwnd + 1MSS * $\frac{\text{MSS}}{\text{cwnd}}$ 
         - In this case, cwnd can only be increased by 1 MSS for each round.
       - If **timeout**
-        - ssthresh = cwnd / 2
-        - cwnd = 1MSS
-        - Re-run the slow start
-      - If a **fast transmission** event occur
-        - ssthresh = cwnd / 2
-        - cwnd = ssthresh + 3 MSS
-        - Run the Fast recovery
+        - Same as slow start
+      - If **fast retransmission**
+        - Same as slow start
     - Fast recovery (recommended but not required part of TCP)
+      - More like a method to quickly catch up where we up to.
       - For every duplicate ACK:
         - cwnd = cwnd + 1MSS
       - If **timeout**
-        - ssthresh = cwnd / 2
-        - cwnd = 1MSS
-        - Re-run the slow start
-      - If it receives a new ACK
+        - Same as slow start
+      - If it receives a **new ACK**
         - cwnd = ssthresh
-        - Go back to congestion avoidance
+        - Go back to <u>congestion avoidance</u>
